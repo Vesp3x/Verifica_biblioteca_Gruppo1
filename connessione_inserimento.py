@@ -76,14 +76,23 @@ print("Utenti inseriti")
 cursor = conn.cursor()
 
 # inserimento dati prestiti
+cursor = conn.cursor()
+
 sql = """
 INSERT INTO prestiti (ID_libri, ID_utenti, data_prestito, data_restituzione)
 VALUES (%s, %s, %s, %s)
 """
 
-valori = (1, 2, "2026-05-10", None)
+# Ogni tupla rappresenta una riga della tabella
+valori = [
+    (2, 2, "2026-05-20", None),
+    (3, 1, "2026-05-20", None),
+    (3, 2, "2026-05-20", None),
+    (3, 1, "2026-05-20", None)
+]
 
-cursor.execute(sql, valori)
+# Usa executemany per gestire la lista
+cursor.executemany(sql, valori)
 conn.commit()
 
 print("Prestito inserito")
