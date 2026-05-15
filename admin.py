@@ -9,6 +9,7 @@ def menu_admin(id_admin, conn, cursor):
         print("5. Visualizza iscritti")
         print("6. Rientro prestiti")
         print("7. Elimina utente")
+        print ("8. Visualizza statistiche")
         print("0. Esci")
 
         scelta = input("Scelta: ")
@@ -78,7 +79,7 @@ def menu_admin(id_admin, conn, cursor):
             print("Utente promosso")
 
         # =========================
-        elif scelta=="5":
+        elif scelta == "5":
 
             print("\nLISTA UTENTI")
 
@@ -122,9 +123,43 @@ def menu_admin(id_admin, conn, cursor):
 
             print("Utente eliminato")
 
-        # =========================
+        elif scelta == "8":
+            
+
+            sql = """
+                SELECT l.titolo, COUNT(p.ID_prestiti) as n_prestiti
+                FROM libri l
+                INNER JOIN prestiti p ON l.ID_libri = p.ID_libri
+                GROUP BY l.ID_libri, l.titolo
+                ORDER BY n_prestiti DESC
+                LIMIT 3
+                """
+
+            cursor.execute(sql)
+            risultati = cursor.fetchall()
+
+
+            for r in risultati:
+                print(r)
+
+
         elif scelta == "0":
             break
 
         else:
             print("Scelta non valida")
+
+
+
+
+
+# SELECT l.titolo,  count(p.ID_prestiti) as n_prestiti
+# FROM libri as l
+# INNER JOIN prestiti as p ON l.ID_libri = p.ID_libri
+# WHERE data_restituzione IS null
+# GROUP BY l.titolo
+# SELECT l.titolo, c.nome_categoria, u.nome as nome_utente, p.data_prestito
+# FROM prestiti as p
+# INNER JOIN libri as l ON p.ID_libri = l.ID_libri
+# INNER JOIN utenti as u ON p.ID_utenti = u.ID_utenti
+# INNER JOIN categoria as c ON l.ID_categoria = c.ID_categoria
